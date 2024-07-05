@@ -26,7 +26,16 @@ public class MapperFactoryBean implements FactoryBean {
         this.mapperInterface = mapperInterface;
     }
 
-    @Autowired
+    /**
+     * 在EsMapperScanner中，设置了 definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+     * 实例化该bean的时候spring会自动调用类中的所有set方法，也就是说，不管set方法上有没有@Autowired注解，都会调用set方法。
+     * 并且set方法所需要的参数，spring也会从容器中去获取并自动注入。
+     * <p>
+     * 当然，也可以不设置definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+     * 直接在属性或者set方法上使用@Autowired注解也行
+     *
+     * @param sqlSessionFactory
+     */
     public void setSqlSession(SqlSessionFactory sqlSessionFactory) {
         sqlSessionFactory.getConfiguration().addMapper(mapperInterface);
         this.sqlSession = sqlSessionFactory.openSession();
